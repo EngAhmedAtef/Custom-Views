@@ -52,6 +52,7 @@
         android:layout_height="60dp"
         app:animationColor="#004349"
         app:buttonColor="#07C2AA"
+        app:arcColor="#F9A825"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

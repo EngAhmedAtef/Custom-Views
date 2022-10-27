@@ -3,6 +3,7 @@ package com.udacity
 import android.app.DownloadManager
 import android.app.NotificationManager
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
@@ -36,10 +37,9 @@ class DetailActivity : AppCompatActivity() {
         }
 
         urlTextView.text = downloadURL
-        statusTextView.text = if (downloadStatus == DownloadManager.STATUS_SUCCESSFUL) "Success" else "Fail"
-
-//        val motionLayout = findViewById<MotionLayout>(R.id.motion_layout)
-//        motionLayout.transitionToEnd()
+        statusTextView.text =
+            if (downloadStatus == DownloadManager.STATUS_SUCCESSFUL) "Success" else "Fail"
+        statusTextView.setTextColor(if (downloadStatus == DownloadManager.STATUS_SUCCESSFUL) Color.GREEN else Color.RED)
     }
 
     private fun setDetailValues(intent: Intent) {

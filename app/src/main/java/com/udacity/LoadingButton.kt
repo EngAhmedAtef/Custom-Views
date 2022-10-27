@@ -6,6 +6,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import androidx.core.content.withStyledAttributes
 import kotlin.properties.Delegates
 
 class LoadingButton @JvmOverloads constructor(
@@ -25,8 +26,8 @@ class LoadingButton @JvmOverloads constructor(
     private var buttonTextSize: Float = 0.0F
 
     // Button colors
-    private var buttonColor = context.getColor(R.color.colorPrimary)
-    private var animatedButtonColor = context.getColor(R.color.colorPrimaryDark)
+    private var buttonColor: Int = -1
+    private var animatedButtonColor: Int = -1
 
     // Button Text
     private val buttonLoadingText = context.getString(R.string.button_loading)
@@ -42,6 +43,7 @@ class LoadingButton @JvmOverloads constructor(
     private var arcRadius = 50
     private val arcAnimationDuration = 800L
     private val arcMargin = 60
+    private var arcColor: Int = -1
 
     // Button State
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { _, old, new ->
@@ -81,6 +83,15 @@ class LoadingButton @JvmOverloads constructor(
         typeface = Typeface.create("", Typeface.BOLD)
     }
 
+    init {
+        context.obtainStyledAttributes(attrs, R.styleable.LoadingButton).apply {
+            buttonColor = getColor(R.styleable.LoadingButton_buttonColor, 0)
+            animatedButtonColor = getColor(R.styleable.LoadingButton_animationColor, 0)
+            arcColor = getColor(R.styleable.LoadingButton_arcColor, 0)
+            recycle()
+        }
+    }
+
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         buttonRect = Rect(
             0, 0,
@@ -110,7 +121,6 @@ class LoadingButton @JvmOverloads constructor(
         paint.color = Color.BLACK
         paint.textSize = buttonTextSize
         paint.textAlign = Paint.Align.CENTER
-        // paint.fontMetricsInt
         canvas?.drawText(
             if (buttonState == ButtonState.Completed) buttonCompleteText else buttonLoadingText,
             buttonTextX.toFloat(),
@@ -118,7 +128,7 @@ class LoadingButton @JvmOverloads constructor(
             paint
         )
 
-        paint.color = resources.getColor(R.color.colorAccent, null)
+        paint.color = arcColor
         canvas?.drawArc(
             (buttonWidth - (arcRadius * 2) - arcMargin).toFloat(), ((buttonHeight / 2) - arcRadius).toFloat(),
             (buttonWidth - arcMargin).toFloat(), ((buttonHeight / 2) + arcRadius).toFloat(),
